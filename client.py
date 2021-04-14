@@ -31,7 +31,7 @@ def client(lsHostname, lsListenPort):
         receivedString = receivedString.decode('utf-8').rstrip() 
 
         # write to RESOLVED.txt file
-        with open('ASH+VIDRESOLVED.txt', 'a') as the_file:
+        with open('RESOLVED.txt', 'a') as the_file:
             the_file.write(receivedString)
             the_file.write("\n")
 

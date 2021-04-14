@@ -57,13 +57,12 @@ def ls(lsListenPort, ts1Hostname, ts1ListenPort, ts2Hostname, ts2ListenPort):
 
         # if we got a response from TS1, send response to client
         try:
-            receivedString = ts1.recv(300) # receive TS1's answer
-            receivedString = receivedString.decode('utf-8').rstrip()
+            receivedString = ts1.recv(300).decode('utf-8').rstrip() # receive TS1's answer
             csockid.send(receivedString.encode('utf-8')) # send string to the client
         # if we didn't get a response from TS1, send error to client
         except socket.timeout:
             try:
-                receivedString = ts2.recv(300).decode("utf-8")
+                receivedString = ts2.recv(300).decode("utf-8").rstrip()
                 csockid.send(receivedString.encode("utf-8"))
             except socket.timeout:
                 errorMessage = "" + queriedHostname + " - Error:HOST NOT FOUND"
