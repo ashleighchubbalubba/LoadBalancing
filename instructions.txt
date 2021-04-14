@@ -11,7 +11,7 @@ multiple DNS servers.
 You will change the root server from project 1, RS, into a
 load-balancing server LS, that interacts with two top-level domain
 servers, TS1 and TS2. Only the TS servers store mappings from
-hostnames to IP addresses; the LS does not. Further, the mappings
+hostames to IP addresses; the LS does not. Further, the mappings
 stored by the TS servers do not overlap with each other; as a result,
 AT MOST ONE of the two TS servers will send a response to LS.
 
