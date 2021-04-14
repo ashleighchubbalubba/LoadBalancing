@@ -26,7 +26,7 @@ def ts1(ts1ListenPort):
     ts1.bind(server_binding) 
     ts1.listen(1)  
     LSsockid, addr = ts1.accept()
-    
+
     while True:
         # receive queried hostname from LS
         queriedHostname = LSsockid.recv(300).decode('utf-8').rstrip()
@@ -36,24 +36,16 @@ def ts1(ts1ListenPort):
 			break
 
         string = ""
-        hasMatched = False
 
         # search dnsTable for queried hostname 
         for info in dnsTable:
             replacement = info[0].lower()
             # check hostname of each list stored in DNSTable 
             if(replacement == queriedHostname):
-                # there's a match! send "Hostname IPaddress A" to client
+                # there's a match! send "Hostname IPaddress A" to LS
                 string = "" + info[0] + " " + info[1] + " " + info[2]
-                hasMatched = True
-                break
-
-        # no match, send 'Hostname - Error:HOST NOT FOUND'
-        if(hasMatched is False):
-            string = "" + queriedHostname + " - Error:HOST NOT FOUND"
-
-        # send string to the LS  
-        LSsockid.send(string.encode('utf-8'))
+                LSsockid.send(string.encode('utf-8'))
+                break        
 
     # Close the server socket
     ts1.close() 

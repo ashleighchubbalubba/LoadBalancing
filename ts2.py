@@ -1,62 +1,56 @@
-# import time
-# import random
-# import socket
+import time
+import random
+import socket
 
-# def ts2(ts2ListenPort): 
-#     dnsTable = [] # list of arrays [ [hostname1, ip1, flag1], [hostname2, ip2, flag2],...]
-#     currInfo = [] # current line's info [hostname1,ip1,flag1]
+def ts2(ts2ListenPort): 
+    dnsTable = [] # list of arrays [ [hostname1, ip1, flag1], [hostname2, ip2, flag2],...]
+    currInfo = [] # current line's info [hostname1,ip1,flag1]
 
-#     # populate the table while reading the file
-#     file = open('PROJI-DNSTS.txt', 'r')
-#     linesList = file.readlines()
-#     for line in linesList: 
-#         for word in line.split(): 
-#             currInfo.append(word) 
-#         dnsTable.append(currInfo)
-#         currInfo = []
-   
-#     try:
-#         ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-#     except socket.error as err: 
-#         exit()
+    # populate the table while reading the file
+    file = open('PROJ2-DNSTS2.txt', 'r')
+    linesList = file.readlines()
+    for line in linesList: 
+        for word in line.split(): 
+            currInfo.append(word) 
+        dnsTable.append(currInfo)
+        currInfo = []
     
-#     server_binding = ('', tsListenPort)
-#     ts.bind(server_binding) 
-#     ts.listen(1)  
-#     csockid, addr = ts.accept()
+    # connect to LS
+    try:
+        ts2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+    except socket.error as err: 
+        exit()
     
-#     while True:
-#         # receive queried hostname from the client
-#         queriedHostname = csockid.recv(300).decode('utf-8').rstrip()
+    # connect to LS server
+    server_binding = ('', ts2ListenPort)
+    ts2.bind(server_binding) 
+    ts2.listen(1)  
+    LSsockid, addr = ts2.accept()
 
-#         # if client finished sending all hostnames, close socket
-#         if queriedHostname == "closeConnection":
-# 			break
+    while True:
+        # receive queried hostname from LS
+        queriedHostname = LSsockid.recv(300).decode('utf-8').rstrip()
 
-#         string = ""
-#         hasMatched = False
+        # if LS finished sending all hostnames, close socket
+        if queriedHostname == "closeConnection":
+			break
 
-#         # search dnsTable for queried hostname 
-#         for info in dnsTable:
-#             replacement = info[0].lower()
-#             # check hostname of each list stored in DNSTable 
-#             if(replacement == queriedHostname):
-#                 # there's a match! send "Hostname IPaddress A" to client
-#                 string = "" + info[0] + " " + info[1] + " " + info[2]
-#                 hasMatched = True
-#                 break
+        string = ""
 
-#         # no match, send 'Hostname - Error:HOST NOT FOUND'
-#         if(hasMatched is False):
-#             string = "" + queriedHostname + " - Error:HOST NOT FOUND"
+        # search dnsTable for queried hostname 
+        for info in dnsTable:
+            replacement = info[0].lower()
+            # check hostname of each list stored in DNSTable 
+            if(replacement == queriedHostname):
+                # there's a match! send "Hostname IPaddress A" to LS
+                string = "" + info[0] + " " + info[1] + " " + info[2]
+                LSsockid.send(string.encode('utf-8'))
+                break        
 
-#         # send string to the client.  
-#         csockid.send(string.encode('utf-8'))
+    # Close the server socket
+    ts2.close() 
+    exit()   
 
-#     # Close the server socket
-#     ts.close() 
-#     exit()   
-
-# if __name__ == "__main__":
-#     tsListenPort = 50008
-#     ts(tsListenPort)
+if __name__ == "__main__":
+    ts2ListenPort = 50009
+    ts2(ts2ListenPort)
