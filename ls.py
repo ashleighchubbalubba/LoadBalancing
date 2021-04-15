@@ -4,7 +4,7 @@ import socket
 
 def ls(lsListenPort, ts1Hostname, ts1ListenPort, ts2Hostname, ts2ListenPort):
 
-    # create to client
+    # create socket to connect to client
     try:
         ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     except socket.error as err: 

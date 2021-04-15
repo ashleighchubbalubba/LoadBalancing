@@ -15,7 +15,7 @@ def ts1(ts1ListenPort):
         dnsTable.append(currInfo)
         currInfo = []
     
-    # connect to LS
+    # socket to connect to LS
     try:
         ts1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
     except socket.error as err: 
